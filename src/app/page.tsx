@@ -13,7 +13,7 @@ import {
   Undo2,
   ZoomIn,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import LogoIcon from "@/components/icons/logo";
@@ -29,8 +29,6 @@ export default function GoogleSlidesPortfolio() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [presentationName, setPresentationName] = useState("Will Sather");
   const [isStarred, setIsStarred] = useState(false);
-
-  const presentationNameRef = useRef<HTMLInputElement | null>(null);
 
   const menuItems = [
     {
