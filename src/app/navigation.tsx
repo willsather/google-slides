@@ -1,6 +1,7 @@
 "use client";
 
 import { Share2, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -51,8 +52,12 @@ const menuItems = [
 ];
 
 export default function Navigation() {
-  const [presentationName, setPresentationName] = useState("Will Sather");
+  const router = useRouter();
+
   const [isStarred, setIsStarred] = useState(false);
+  const [presentationName, setPresentationName] = useState(
+    "Will Sather Portfolio",
+  );
 
   async function copyShareLink() {
     try {
@@ -133,7 +138,11 @@ export default function Navigation() {
 
       <div className="ml-auto flex items-center gap-2">
         <div className="my-1 ml-auto">
-          <Button variant="outline" className="gap-2 rounded-2xl">
+          <Button
+            variant="outline"
+            onClick={() => router.push("/present")}
+            className="gap-2 rounded-2xl"
+          >
             Slideshow
           </Button>
         </div>

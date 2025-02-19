@@ -1,7 +1,8 @@
-# Google Slides
+# Google Slides Portfolio
 
-This is a basic **Next.js** application designed to simulate a Google Slides editor. I've been messing around with 
-[`v0.dev`](https://www.v0.dev) and seeing how complex and creative it can get.
+This is a basic **Next.js** application designed to simulate a Google Slides editor to demonstrate the Next.js projects
+I've recently built.  I also have been messing around with [`v0.dev`](https://www.v0.dev) and seeing how complex and creative it can 
+get. 
 
 ## Getting Started
 

@@ -1,98 +1,125 @@
 "use client";
 
-import Toolbar from "@/app/toolbar";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default function Slides() {
+import Project from "@/app/project";
+import Toolbar from "@/app/toolbar";
+
+const slides = [
+  {
+    name: "Website",
+    url: "www.sather.ws",
+    title: "Personal Website",
+    description: "resume, blog, and just about me",
+  },
+  {
+    name: "TechCrunch",
+    title: "TechCrunch Skills Assessment",
+    url: "techcrunchy.vercel.app",
+    description: "recreated techcrunch.com using next.js and vercel",
+  },
+  {
+    name: "Family Tree",
+    title: "Sather Family Tree",
+    url: "www.sather.family",
+    description:
+      "paired with v0 and my grandparents to build a digital family tree",
+  },
+  {
+    name: "MN Civic Tech",
+    title: "MN Civic Tech",
+    url: "www.mncivictech.org",
+    description:
+      "co-founded a civic tech nonprofit in minnesota (and of course built the website)",
+  },
+  {
+    name: "Portfolio",
+    title: "Google Slides Portfolio",
+    url: "google-slides-portfolio.vercel.app",
+    description:
+      "paired with v0 to build a google slides 'presentation' of my vercel / next.js applications",
+  },
+];
+
+export default function Slides({ present }: { present?: boolean }) {
+  const router = useRouter();
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedFont, setSelectedFont] = useState("font-sans");
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      setCurrentSlide((prev) => {
+        if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+          return prev < slides.length - 1 ? prev + 1 : prev;
+        }
+
+        if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+          return prev > 0 ? prev - 1 : prev;
+        }
+
+        return prev;
+      });
+
+      if (
+        event.key === "Escape" ||
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+        router.push("/");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [router]);
+
   return (
     <>
-      <Toolbar selectedFont={selectedFont} setSelectedFont={setSelectedFont} />
+      {!present ? (
+        <Toolbar
+          selectedFont={selectedFont}
+          setSelectedFont={setSelectedFont}
+        />
+      ) : null}
 
       <div className={`flex flex-1 overflow-hidden ${selectedFont}`}>
         {/* Left Sidebar */}
-        <div className="w-48 space-y-4 border-r p-4">
-          {[
-            { number: 1, title: "AI Chat Bot" },
-            { number: 2, title: "3D Portfolio" },
-            { number: 3, title: "Blockchain Voting" },
-            { number: 4, title: "AR Navigation App" },
-            { number: 5, title: "IoT Dashboard" },
-          ].map((slide, index) => (
-            <div
-              key={`slide-${index.toString()}`}
-              className={`aspect-video cursor-pointer rounded-lg border-2 transition-colors hover:border-gray-400 ${
-                currentSlide === index ? "border-primary" : ""
-              }`}
-              onClick={() => setCurrentSlide(index)}
-              onKeyUp={() => setCurrentSlide(index)}
-              onKeyDown={() => setCurrentSlide(index)}
-            >
-              <div className="flex items-center justify-between p-2 text-xs">
-                <span>{slide.number}</span>
-                <span className="truncate text-[10px] text-muted-foreground">
-                  {slide.title}
-                </span>
+        {!present ? (
+          <div className="w-48 space-y-4 border-r p-4">
+            {slides.map((slide, index) => (
+              <div
+                key={slide.name}
+                className={`aspect-video cursor-pointer rounded-lg border-2 transition-colors hover:border-gray-400 ${
+                  currentSlide === index ? "border-primary" : ""
+                }`}
+                onClick={() => setCurrentSlide(index)}
+                onKeyUp={() => setCurrentSlide(index)}
+                onKeyDown={() => setCurrentSlide(index)}
+              >
+                <div className="flex items-center justify-between p-2 text-xs">
+                  <span>{index + 1}</span>
+                  <span className="truncate text-[10px] text-muted-foreground">
+                    {slide.name}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : null}
 
         {/* Slide Content */}
         <div className="flex-1 bg-muted/20 p-8">
           <div className="mx-auto aspect-video max-w-4xl rounded-lg bg-background p-8 shadow-lg">
-            {currentSlide === 0 && (
-              <div className="space-y-4">
-                <h1 className="mt-20 text-center font-light text-4xl">
-                  AI-Powered Chat Bot
-                </h1>
-                <p className="text-center text-muted-foreground text-xl">
-                  Natural language processing for customer support
-                </p>
-              </div>
-            )}
-            {currentSlide === 1 && (
-              <div className="space-y-4">
-                <h1 className="mt-20 text-center font-light text-4xl">
-                  3D Portfolio Visualizer
-                </h1>
-                <p className="text-center text-muted-foreground text-xl">
-                  Interactive 3D representation of project achievements
-                </p>
-              </div>
-            )}
-            {currentSlide === 2 && (
-              <div className="space-y-4">
-                <h1 className="mt-20 text-center font-light text-4xl">
-                  Blockchain Voting System
-                </h1>
-                <p className="text-center text-muted-foreground text-xl">
-                  Secure and transparent digital voting platform
-                </p>
-              </div>
-            )}
-            {currentSlide === 3 && (
-              <div className="space-y-4">
-                <h1 className="mt-20 text-center font-light text-4xl">
-                  AR Navigation App
-                </h1>
-                <p className="text-center text-muted-foreground text-xl">
-                  Augmented reality for intuitive city navigation
-                </p>
-              </div>
-            )}
-            {currentSlide === 4 && (
-              <div className="space-y-4">
-                <h1 className="mt-20 text-center font-light text-4xl">
-                  Smart Home IoT Dashboard
-                </h1>
-                <p className="text-center text-muted-foreground text-xl">
-                  Centralized control for connected home devices
-                </p>
-              </div>
-            )}
+            <Project
+              name={slides[currentSlide].title}
+              url={slides[currentSlide].url}
+              description={slides[currentSlide].description}
+            />
           </div>
         </div>
       </div>
