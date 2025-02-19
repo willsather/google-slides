@@ -24,10 +24,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export default function GoogleSlidesPortfolio() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [presentationName, setPresentationName] = useState("Will Sather");
+  const [selectedFont, setSelectedFont] = useState("font-sans");
   const [isStarred, setIsStarred] = useState(false);
 
   const menuItems = [
@@ -72,6 +74,8 @@ export default function GoogleSlidesPortfolio() {
       items: ["Documentation", "Keyboard shortcuts", "Report an issue"],
     },
   ];
+
+  const tailwindFonts = ["font-sans", "font-serif", "font-mono"];
 
   const toggleStar = () => {
     setIsStarred(!isStarred);
@@ -191,15 +195,21 @@ export default function GoogleSlidesPortfolio() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 gap-1 text-xs">
-              Arial
+            <Button variant="ghost" className="h-8 gap-1 text-xs uppercase">
+              {selectedFont.replace("font-", "")}
               <ChevronDown className="h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>Arial</DropdownMenuItem>
-            <DropdownMenuItem>Times New Roman</DropdownMenuItem>
-            <DropdownMenuItem>Roboto</DropdownMenuItem>
+            {tailwindFonts.map((font) => (
+              <DropdownMenuItem
+                key={font}
+                onClick={() => setSelectedFont(font)}
+                className={cn(font, "uppercase")}
+              >
+                {font.replace("font-", "")}
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -220,7 +230,7 @@ export default function GoogleSlidesPortfolio() {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className={`flex flex-1 overflow-hidden ${selectedFont}`}>
         {/* Left Sidebar */}
         <div className="w-48 space-y-4 border-r p-4">
           {[
