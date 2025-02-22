@@ -14,6 +14,13 @@ const slides = [
     description: "resume, blog, and just about me",
   },
   {
+    name: "JetBlue",
+    title: "JetBlue Vercel Demo",
+    url: "jetblue.vercel.app",
+    description:
+      "demo version of the jetblue.com website using next.js and vercel",
+  },
+  {
     name: "TechCrunch",
     title: "TechCrunch Skills Assessment",
     url: "techcrunchy.vercel.app",
@@ -90,7 +97,7 @@ export default function Slides({ present }: { present?: boolean }) {
       <div className={`flex flex-1 overflow-hidden ${selectedFont}`}>
         {/* Left Sidebar */}
         {!present ? (
-          <div className="w-48 space-y-4 border-r p-4">
+          <div className="w-48 space-y-4 overflow-y-scroll border-r p-4">
             {slides.map((slide, index) => (
               <div
                 key={slide.name}
