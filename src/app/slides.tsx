@@ -5,8 +5,17 @@ import { useEffect, useState } from "react";
 
 import Project from "@/app/project";
 import Toolbar from "@/app/toolbar";
+import IntroSlide from "@/app/intro-slide";
+import Sidebar from "@/app/sidebar";
 
 const slides = [
+  {
+    name: "Intro",
+    component: IntroSlide,
+    title: "Will Sather",
+    url: "",
+    description: "Software Engineer & Web Developer",
+  },
   {
     name: "Website",
     url: "www.sather.ws",
@@ -39,13 +48,6 @@ const slides = [
     url: "www.mncivictech.org",
     description:
       "co-founded a civic tech nonprofit in minnesota (and of course built the website)",
-  },
-  {
-    name: "Portfolio",
-    title: "Google Slides Portfolio",
-    url: "google-slides-portfolio.vercel.app",
-    description:
-      "paired with v0 to build a google slides 'presentation' of my vercel / next.js applications",
   },
 ];
 
@@ -85,6 +87,23 @@ export default function Slides({ present }: { present?: boolean }) {
     };
   }, [router]);
 
+  // Render the slide content based on the current slide
+  const renderSlideContent = () => {
+    const slide = slides[currentSlide];
+
+    if (currentSlide === 0 && slide.component) {
+      return <slide.component />;
+    }
+
+    return (
+      <Project
+        name={slide.title}
+        url={slide.url}
+        description={slide.description}
+      />
+    );
+  };
+
   return (
     <>
       {!present ? (
@@ -97,36 +116,17 @@ export default function Slides({ present }: { present?: boolean }) {
       <div className={`flex flex-1 overflow-hidden ${selectedFont}`}>
         {/* Left Sidebar */}
         {!present ? (
-          <div className="w-48 space-y-4 overflow-y-scroll border-r p-4">
-            {slides.map((slide, index) => (
-              <div
-                key={slide.name}
-                className={`aspect-video cursor-pointer rounded-lg border-2 transition-colors hover:border-gray-400 ${
-                  currentSlide === index ? "border-primary" : ""
-                }`}
-                onClick={() => setCurrentSlide(index)}
-                onKeyUp={() => setCurrentSlide(index)}
-                onKeyDown={() => setCurrentSlide(index)}
-              >
-                <div className="flex items-center justify-between p-2 text-xs">
-                  <span>{index + 1}</span>
-                  <span className="truncate text-[10px] text-muted-foreground">
-                    {slide.name}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Sidebar
+            slides={slides}
+            currentSlide={currentSlide}
+            setCurrentSlide={setCurrentSlide}
+          />
         ) : null}
 
         {/* Slide Content */}
         <div className="flex-1 bg-muted/20 p-8">
           <div className="mx-auto aspect-video max-w-4xl rounded-lg bg-background p-8 shadow-lg">
-            <Project
-              name={slides[currentSlide].title}
-              url={slides[currentSlide].url}
-              description={slides[currentSlide].description}
-            />
+            {renderSlideContent()}
           </div>
         </div>
       </div>
